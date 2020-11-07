@@ -21,6 +21,7 @@ import br.com.inarigames.graphics.GameOver;
 import br.com.inarigames.graphics.Spritesheet;
 import br.com.inarigames.graphics.Start;
 import br.com.inarigames.graphics.UI;
+import br.com.inarigames.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener{
 
@@ -36,17 +37,20 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	private BufferedImage image;
 	
+	private World world;
+	
 	public static Player player;
 	public static List<Entity> entities;
 	public static List<Entity> toRemove;
 	public static Spritesheet spritesheet =  new Spritesheet("/spritesheet.png");
 	
-	public static final int WIDTH = 384;
-	public static final int HEIGHT = 256;
+	public static final int WIDTH = 480;
+	public static final int HEIGHT = 320;
 	public static final int SCALE = 2;
 	
 	private static String gameState = "START";
 	
+	private static int level = 1;
 	private Start start;
 	private GameOver gameOver;
 	private UI ui;
@@ -60,8 +64,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		//initializing objects
 		image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
+		toRemove = new ArrayList<Entity>();
 		player = new Player(176, 128, 32, 32, Game.spritesheet.getSprite(0, 0, 32, 32));
 		entities.add(player);
+		
+		world = new World("/level" + level + ".png");
+		
 		random = new Random();
 		ui = new UI();
 		start = new Start();
@@ -145,6 +153,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		graphics.setColor(new Color(122,102,255));
 		graphics.fillRect(0, 0, WIDTH, HEIGHT);
 		
+		world.render(graphics);
+		Collections.sort(entities, Entity.entitySorter);
 		for (Entity entity : entities) {
 			entity.render(graphics);
 		}
