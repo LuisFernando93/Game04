@@ -5,6 +5,10 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Comparator;
 
+import br.com.inarigames.main.Game;
+import br.com.inarigames.world.Camera;
+import br.com.inarigames.world.World;
+
 public class Entity {
 	
 	protected double x, y;
@@ -12,6 +16,10 @@ public class Entity {
 	protected int width, height;
 	protected int maskx, masky, maskw, maskh;
 	protected int depth;
+	protected static int GRAVITY = 2;
+	
+	protected static BufferedImage PLAYER_RIGHT_EN = Game.spritesheet.getSprite(64, 0, 32, 32);
+	protected static BufferedImage PLAYER_LEFT_EN = Game.spritesheet.getSprite(64, 32, 32, 32);
 	
 	public static Comparator<Entity> entitySorter = new Comparator<Entity>() {
 		
@@ -75,11 +83,17 @@ public class Entity {
 		return false;
 	}
 	
+	protected void freeFall() {
+		if (World.isFree(this.getX(), this.getY() + GRAVITY)) {
+			this.y+=GRAVITY;
+		}
+	}
+	
 	public void update() {
 		
 	}
 	
 	public void render(Graphics graphics) {
-		graphics.drawImage(sprite, this.getX(), this.getY(), null);
+		graphics.drawImage(sprite, Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
 	}
 }

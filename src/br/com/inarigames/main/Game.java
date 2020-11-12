@@ -65,7 +65,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
 		toRemove = new ArrayList<Entity>();
-		player = new Player(176, 128, 32, 32, Game.spritesheet.getSprite(0, 0, 32, 32));
+		player = new Player(176, 128, 32, 32, Game.spritesheet.getSprite(64, 0, 32, 32));
 		entities.add(player);
 		
 		world = new World("/level" + level + ".png");
@@ -216,7 +216,17 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		switch (Game.gameState) {
 		
+		case "NORMAL":
+			if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				player.setRight(true);
+			} else if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
+				player.setLeft(true);
+			}
+			break;
+			
+		}
 	}
 
 	@Override
@@ -230,7 +240,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			break;
 		
 		case "NORMAL":
-			
+			if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				player.setRight(false);
+			} else if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
+				player.setLeft(false);
+			}
 			break;
 		
 		case "GAME OVER":

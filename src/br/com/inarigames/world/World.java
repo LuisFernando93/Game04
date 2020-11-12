@@ -54,6 +54,12 @@ public class World {
 						//branco - block
 						tiles[i][j] = new BlockTile(i*TILE_SIZE, j*TILE_SIZE, Tile.TILE_BLOCK);
 						break;
+						
+					case 0xFF0000FF:
+						//azul - player
+						Game.player.setX(i*TILE_SIZE);
+						Game.player.setY(j*TILE_SIZE);
+						break;
 
 					default:
 						throw new IllegalArgumentException("Unexpected value: " + pixelAtual);
