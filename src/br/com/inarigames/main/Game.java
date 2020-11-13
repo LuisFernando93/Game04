@@ -245,6 +245,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			} else if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
 				player.setLeft(false);
 			}
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				player.setJump(true);
+			}
 			break;
 		
 		case "GAME OVER":
