@@ -14,7 +14,7 @@ public class Entity {
 	protected double x, y;
 	protected BufferedImage sprite;
 	protected int width, height;
-	protected int maskx, masky, maskw, maskh;
+	protected int maskx = 0, masky = 0, maskw = 32, maskh = 32;
 	protected int depth;
 	protected static int GRAVITY = 4;
 	
@@ -22,6 +22,8 @@ public class Entity {
 	protected static BufferedImage PLAYER_LEFT_EN = Game.spritesheet.getSprite(2*32, 32, 32, 32);
 	protected static BufferedImage PLAYER_JUMP_RIGHT_EN = Game.spritesheet.getSprite(6*32, 0, 32, 32);
 	protected static BufferedImage PLAYER_JUMP_LEFT_EN = Game.spritesheet.getSprite(6*32, 32, 32, 32);
+	protected static BufferedImage ENEMY_RIGHT_EN = Game.spritesheet.getSprite(2*32, 3*32, 32, 32);
+	protected static BufferedImage ENEMY_LEFT_EN = Game.spritesheet.getSprite(2*32, 2*32, 32, 32);
 	
 	public static Comparator<Entity> entitySorter = new Comparator<Entity>() {
 		
@@ -77,8 +79,8 @@ public class Entity {
 	}
 	
 	public static boolean isColliding(Entity e1, Entity e2) {
-		Rectangle e1Mask = new Rectangle(e1.maskx, e1.masky, e1.maskw, e1.maskh);
-		Rectangle e2Mask = new Rectangle(e2.maskx, e2.masky, e2.maskw, e2.maskh);
+		Rectangle e1Mask = new Rectangle(e1.getX() + e1.maskx, e1.getY() + e1.masky, e1.maskw, e1.maskh);
+		Rectangle e2Mask = new Rectangle(e2.getX() + e2.maskx, e2.getY() + e2.masky, e2.maskw, e2.maskh);
 		if (e1Mask.intersects(e2Mask)) {
 			return true;
 		}

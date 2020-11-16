@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import br.com.inarigames.entities.Enemy;
 import br.com.inarigames.main.Game;
 
 public class World {
@@ -62,6 +63,12 @@ public class World {
 						//azul - player
 						Game.player.setX(i*TILE_SIZE);
 						Game.player.setY(j*TILE_SIZE);
+						break;
+						
+					case 0xFFFF0000:
+						//vermelho - inimigo
+						Enemy enemy = new Enemy(i*TILE_SIZE,j*TILE_SIZE,32,32,null);
+						Game.entities.add(enemy);
 						break;
 
 					default:
