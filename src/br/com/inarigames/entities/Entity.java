@@ -20,12 +20,6 @@ public class Entity {
 	
 	protected static BufferedImage PLAYER_RIGHT_EN = Game.spritesheet.getSprite(2*32, 0, 32, 32);
 	protected static BufferedImage PLAYER_LEFT_EN = Game.spritesheet.getSprite(2*32, 32, 32, 32);
-	protected static BufferedImage PLAYER_MOVE1_RIGHT_EN = Game.spritesheet.getSprite(3*32, 0, 32, 32);
-	protected static BufferedImage PLAYER_MOVE2_RIGHT_EN = Game.spritesheet.getSprite(4*32, 0, 32, 32);
-	protected static BufferedImage PLAYER_MOVE3_RIGHT_EN = Game.spritesheet.getSprite(5*32, 0, 32, 32);
-	protected static BufferedImage PLAYER_MOVE1_LEFT_EN = Game.spritesheet.getSprite(3*32, 32, 32, 32);
-	protected static BufferedImage PLAYER_MOVE2_LEFT_EN = Game.spritesheet.getSprite(4*32, 32, 32, 32);
-	protected static BufferedImage PLAYER_MOVE3_LEFT_EN = Game.spritesheet.getSprite(5*32, 32, 32, 32);
 	protected static BufferedImage PLAYER_JUMP_RIGHT_EN = Game.spritesheet.getSprite(6*32, 0, 32, 32);
 	protected static BufferedImage PLAYER_JUMP_LEFT_EN = Game.spritesheet.getSprite(6*32, 32, 32, 32);
 	

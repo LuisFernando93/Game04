@@ -20,7 +20,7 @@ public class Player extends Entity{
 	
 	private BufferedImage[] playerMoveRightSprites;
 	private BufferedImage[] playerMoveLeftSprites;
-	private int frames = 0, maxFrames = 5, imageIndex = 0, maxIndex = 3; 
+	private int frames = 0, maxFrames = 10, imageIndex = 0, maxIndex = 3; 
 	
 	private int speed = 2;
 	private int dir;
@@ -110,10 +110,18 @@ public class Player extends Entity{
 		}
 	}
 	
+	private void updateCamera() {
+		int xx = Camera.clamp(this.getX() - (Game.WIDTH/2), 0, World.getWidth()*World.TILE_SIZE - Game.WIDTH);
+		int yy = Camera.clamp(this.getY() - (Game.HEIGHT/2), 0, World.getHeight()*World.TILE_SIZE -  Game.HEIGHT);
+		Camera.setX(xx);
+		Camera.setY(yy);
+	}
+	
 	public void update() {
 		freeFall();
 		move();
 		jump();
+		updateCamera();
 	}
 	
 	private void movementRender(Graphics graphics) {

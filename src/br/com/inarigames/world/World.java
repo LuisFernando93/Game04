@@ -53,6 +53,9 @@ public class World {
 					case 0xFFFFFFFF:
 						//branco - block
 						tiles[i][j] = new BlockTile(i*TILE_SIZE, j*TILE_SIZE, Tile.TILE_BLOCK);
+						if ((j-1) >= 0 && pixels[i + ((j-1)*map.getWidth())] == 0xFFFFFFFF) {
+							tiles[i][j] = new BlockTile(i*TILE_SIZE, j*TILE_SIZE, Tile.TILE_DIRT);
+						}
 						break;
 						
 					case 0xFF0000FF:
@@ -107,12 +110,18 @@ public class World {
 		int x4 = (xnext+TILE_SIZE-1) / TILE_SIZE;
 		int y4 = (ynext+TILE_SIZE-1) / TILE_SIZE;
 		
-		boolean isFree = !(tiles[x1][y1] instanceof BlockTile || 
-						tiles[x2][y2] instanceof BlockTile || 
-						tiles[x3][y3] instanceof BlockTile || 
-						tiles[x4][y4] instanceof BlockTile);
+		try {
+			boolean isFree = !(tiles[x1][y1] instanceof BlockTile || 
+					tiles[x2][y2] instanceof BlockTile || 
+					tiles[x3][y3] instanceof BlockTile || 
+					tiles[x4][y4] instanceof BlockTile);
+	
+			return isFree;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("Player out of bound");
+			return true;
+		}
 		
-		return isFree;
 	}
 	
 	public void render(Graphics graphics) {
