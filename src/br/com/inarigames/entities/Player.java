@@ -1,5 +1,6 @@
 package br.com.inarigames.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -23,6 +24,7 @@ public class Player extends Entity{
 	private int frames = 0, maxFrames = 10, imageIndex = 0, maxIndex = 3; 
 	
 	private int speed = 2;
+	private int power = 1;
 	private int dir;
 	private int right_dir = 1, left_dir = 2;
 	
@@ -31,6 +33,10 @@ public class Player extends Entity{
 		super(x, y, width, height, sprite);
 		depth = 2;
 		dir = right_dir;
+		this.maskx = 7;
+		this.masky = 0;
+		this.maskw = 18;
+		this.maskh = 32;
 		playerMoveRightSprites = new BufferedImage[3];
 		playerMoveLeftSprites = new BufferedImage[3];
 		for (int i = 0; i < playerMoveRightSprites.length; i++) {
@@ -104,10 +110,50 @@ public class Player extends Entity{
 		
 	}
 	
+	private void halfJump() {
+		
+		isJumping = true;
+		if (isJumping) {
+			if (World.isFree(this.getX(), this.getY()-jumpSpeed)) {
+				y-=jumpSpeed;
+				jumpFrames+=jumpSpeed;
+				if (jumpFrames >= (jumpHeight)/2) {
+					isJumping = false;
+					jump = false;
+					jumpFrames = 0;
+				}
+			} else {
+				isJumping = false;
+				jump = false;
+				jumpFrames = 0;
+			}
+		} 
+	}
+	
+	private Enemy collidingEnemy() {
+		for (Entity entity : Game.entities) {
+			if (entity instanceof Enemy) {
+				if (isColliding(this, entity)) {
+					return (Enemy)entity;
+				}
+			}
+		}
+		return null;
+	}
+	
+	private void stompEnemy(Enemy enemy) {
+		enemy.takeDamage(power);
+		halfJump();
+	}
+	
 	protected void freeFall() {
 		if (World.isFree(this.getX(), this.getY() + GRAVITY)  && !isJumping) {
 			this.y+=GRAVITY;
-		}
+			Enemy enemy = collidingEnemy();
+			if (enemy != null) {
+				stompEnemy(enemy);
+			}
+ 		}
 	}
 	
 	private void updateCamera() {

@@ -1,5 +1,6 @@
 package br.com.inarigames.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -16,7 +17,7 @@ public class Entity {
 	protected int width, height;
 	protected int maskx = 0, masky = 0, maskw = 32, maskh = 32;
 	protected int depth;
-	protected static int GRAVITY = 4;
+	protected static final int GRAVITY = 4;
 	
 	protected static BufferedImage PLAYER_RIGHT_EN = Game.spritesheet.getSprite(2*32, 0, 32, 32);
 	protected static BufferedImage PLAYER_LEFT_EN = Game.spritesheet.getSprite(2*32, 32, 32, 32);
@@ -43,10 +44,6 @@ public class Entity {
 		this.width = width;
 		this.height = height;
 		this.sprite = sprite;
-		maskx = this.getX();
-		masky = this.getY();
-		maskw = width;
-		maskh = height;
 		depth = 1;
 	}
 	
