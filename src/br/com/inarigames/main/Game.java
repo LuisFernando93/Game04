@@ -37,7 +37,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	private BufferedImage image;
 	
-	private World world;
+	private static World world;
 	
 	public static Player player;
 	public static List<Entity> entities;
@@ -73,6 +73,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		random = new Random();
 		ui = new UI();
 		start = new Start();
+		gameOver = new GameOver();
+	}
+	
+	public static void setWorld(World world) {
+		Game.world = world;
 	}
 	
 	public static void setGameState(String gameState) {
@@ -114,6 +119,13 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	public static void newGame() {
 		entities.clear();
+		toRemove.clear();
+		Game.player = new Player(0, 0, 32, 32, Game.spritesheet.getSprite(64, 0, 32, 32));
+		Game.entities.add(Game.player);
+		level = 1;
+		World.newWorld("level" + level + ".png");
+		Game.gameState = "NORMAL";
+		return;
 	}
 	
 	private void update() {

@@ -1,6 +1,5 @@
 package br.com.inarigames.entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -18,6 +17,7 @@ public class Entity {
 	protected int maskx = 0, masky = 0, maskw = 32, maskh = 32;
 	protected int depth;
 	protected static final int GRAVITY = 4;
+	protected boolean freeFalling = false;
 	
 	protected static BufferedImage PLAYER_RIGHT_EN = Game.spritesheet.getSprite(2*32, 0, 32, 32);
 	protected static BufferedImage PLAYER_LEFT_EN = Game.spritesheet.getSprite(2*32, 32, 32, 32);
@@ -85,7 +85,12 @@ public class Entity {
 	}
 	
 	protected void freeFall() {
-		if (World.isFree(this.getX(), this.getY() + GRAVITY)) {
+		
+		if(World.isFree(this.getX(), this.getY() + GRAVITY)) {
+			freeFalling = true;
+		} else freeFalling = false;
+		
+		if (freeFalling) {
 			this.y+=GRAVITY;
 		}
 	}

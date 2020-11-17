@@ -1,6 +1,5 @@
 package br.com.inarigames.entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -15,6 +14,7 @@ public class Player extends Entity{
 	private boolean jump = false;
 	private boolean isJumping = false;
 	private boolean isMoving = false;
+	private boolean isDamaged = false;
 	private int jumpSpeed = 4;
 	private int jumpFrames = 0;
 	private int jumpHeight = 80;
@@ -22,7 +22,10 @@ public class Player extends Entity{
 	private BufferedImage[] playerMoveRightSprites;
 	private BufferedImage[] playerMoveLeftSprites;
 	private int frames = 0, maxFrames = 10, imageIndex = 0, maxIndex = 3; 
+	private int damageFrames = 0, maxDamageFrames = 12;
 	
+	private static final int MAX_LIFE = 3;
+	private int life = MAX_LIFE;
 	private int speed = 2;
 	private int power = 1;
 	private int dir;
@@ -45,6 +48,14 @@ public class Player extends Entity{
 		}
 	}
 	
+	public int getLife() {
+		return this.life;
+	}
+	
+	public int getMaxLife() {
+		return Player.MAX_LIFE;
+	}
+	
 	public void setRight(boolean right) {
 		this.right = right;
 	}
@@ -55,6 +66,13 @@ public class Player extends Entity{
 	
 	public void setJump(boolean jump) {
 		this.jump = jump;
+	}
+	
+	public void takeDamege(int power) {
+		this.life-=power;
+		if(this.life < 0) {
+			this.life = 0;
+		}
 	}
 	
 	private void playerMovementAnimation() {
@@ -147,7 +165,12 @@ public class Player extends Entity{
 	}
 	
 	protected void freeFall() {
-		if (World.isFree(this.getX(), this.getY() + GRAVITY)  && !isJumping) {
+		
+		if(World.isFree(this.getX(), this.getY() + GRAVITY)) {
+			freeFalling = true;
+		} else freeFalling = false;
+		
+		if (freeFalling  && !isJumping) {
 			this.y+=GRAVITY;
 			Enemy enemy = collidingEnemy();
 			if (enemy != null) {
@@ -163,11 +186,47 @@ public class Player extends Entity{
 		Camera.setY(yy);
 	}
 	
+	private void fallOutOfGame() {
+		if (this.y >= Game.HEIGHT + 2*this.height) {
+			this.life = 0;
+		}
+	}
+	
+	private void takeDamage() {
+		Enemy enemy = collidingEnemy();
+		if(enemy != null && !freeFalling && !isDamaged) {
+			life-=enemy.getPower();
+			isDamaged = true;
+		}
+	}
+	
+	private void checkIfIsDamaged() {
+		
+		if (isDamaged) {
+			this.damageFrames++;
+			if(this.damageFrames == maxDamageFrames){
+				this.damageFrames = 0;
+				this.isDamaged = false;
+			}
+		}
+	}
+	
+	private void checkLife() {
+		if (this.life <= 0) {
+			Game.toRemove.add(this);
+			Game.setGameState("GAME OVER");
+		}
+	}
+	
 	public void update() {
 		freeFall();
 		move();
 		jump();
 		updateCamera();
+		fallOutOfGame();
+		takeDamage();
+		checkIfIsDamaged();
+		checkLife();
 	}
 	
 	private void movementRender(Graphics graphics) {

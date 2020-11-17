@@ -9,7 +9,8 @@ import br.com.inarigames.world.World;
 public class Enemy extends Entity{
 	
 	private int speed = 1;
-	private int life = 1;
+	private int life = 2;
+	private int power = 1;
 	private boolean right = true, left = false;
 	
 	public void takeDamage(int power) {
@@ -25,6 +26,10 @@ public class Enemy extends Entity{
 		this.maskh = 23;
 		
 	}	
+	
+	public int getPower() {
+		return this.power;
+	}
 	
 	private void move() {
 		if (right) {

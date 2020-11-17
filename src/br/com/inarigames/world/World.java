@@ -83,6 +83,12 @@ public class World {
 		}
 	}
 	
+	public static void newWorld(String world) {
+		World newWorld = new World("/" + world);
+		Game.setWorld(newWorld);
+		return;
+	}
+	
 	public static boolean isFreeDynamic(int xnext, int ynext, int width, int height) {
 		int x1 = xnext / TILE_SIZE;
 		int y1 = ynext / TILE_SIZE;
