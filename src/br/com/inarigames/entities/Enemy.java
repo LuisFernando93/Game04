@@ -62,6 +62,7 @@ public class Enemy extends Entity{
 	private void checkLife() {
 		if (life <= 0) {
 			Game.toRemove.add(this);
+			Game.increaseScore();
 			return;
 		}
 	}

@@ -25,6 +25,8 @@ public class Entity {
 	protected static BufferedImage PLAYER_JUMP_LEFT_EN = Game.spritesheet.getSprite(6*32, 32, 32, 32);
 	protected static BufferedImage ENEMY_RIGHT_EN = Game.spritesheet.getSprite(2*32, 3*32, 32, 32);
 	protected static BufferedImage ENEMY_LEFT_EN = Game.spritesheet.getSprite(2*32, 2*32, 32, 32);
+	protected static BufferedImage COIN_EN = Game.spritesheet.getSprite(0, 2*32, 32, 32);
+	protected static BufferedImage GOAL_EN = Game.spritesheet.getSprite(0, 1*32, 32, 32);
 	
 	public static Comparator<Entity> entitySorter = new Comparator<Entity>() {
 		

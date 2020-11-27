@@ -6,7 +6,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import br.com.inarigames.entities.Coin;
 import br.com.inarigames.entities.Enemy;
+import br.com.inarigames.entities.Goal;
 import br.com.inarigames.main.Game;
 
 public class World {
@@ -71,6 +73,17 @@ public class World {
 						Game.entities.add(enemy);
 						break;
 
+					case 0xFFFFFF00:
+						//amarelo - moeda
+						Coin coin = new Coin(i*TILE_SIZE,j*TILE_SIZE,32,32,null);
+						Game.entities.add(coin);
+						break;
+					
+					case 0xFFFF00FF:
+						//roxo - final
+						Goal goal = new Goal(i*TILE_SIZE,j*TILE_SIZE,32,32,Game.spritesheet.getSprite(0, 32, 32, 32));
+						Game.entities.add(goal);
+						break;
 					default:
 						throw new IllegalArgumentException("Unexpected value: " + pixelAtual);
 					}

@@ -15,9 +15,9 @@ public class Player extends Entity{
 	private boolean isJumping = false;
 	private boolean isMoving = false;
 	private boolean isDamaged = false;
-	private int jumpSpeed = 4;
+	private int jumpSpeed = 5;
 	private int jumpFrames = 0;
-	private int jumpHeight = 80;
+	private int jumpHeight = 100;
 	
 	private BufferedImage[] playerMoveRightSprites;
 	private BufferedImage[] playerMoveLeftSprites;
@@ -159,6 +159,17 @@ public class Player extends Entity{
 		return null;
 	}
 	
+	private Entity collidingItem() {
+		for (Entity entity : Game.entities) {
+			if (entity instanceof Coin) {
+				if(isColliding(this, entity)) {
+					return entity;
+				}
+			}
+		}
+		return null;
+	}
+	
 	private void stompEnemy(Enemy enemy) {
 		enemy.takeDamage(power);
 		halfJump();
@@ -189,6 +200,17 @@ public class Player extends Entity{
 	private void fallOutOfGame() {
 		if (this.y >= Game.HEIGHT + 2*this.height) {
 			this.life = 0;
+		}
+	}
+	
+	private void takeItem() {
+		Entity item = collidingItem();
+		if (item != null) {
+			//item coletado. verificar tipo
+			if (item instanceof Coin) {
+				Game.increaseScore();
+				Game.toRemove.add(item);
+			}
 		}
 	}
 	
@@ -224,9 +246,18 @@ public class Player extends Entity{
 		jump();
 		updateCamera();
 		fallOutOfGame();
+		takeItem();
 		takeDamage();
 		checkIfIsDamaged();
 		checkLife();
+	}
+	
+	private void jumpRender(Graphics graphics) {
+		if (dir == right_dir) {
+			graphics.drawImage(PLAYER_JUMP_RIGHT_EN, Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
+		} else if (dir == left_dir) {
+			graphics.drawImage(PLAYER_JUMP_LEFT_EN, Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
+		}
 	}
 	
 	private void movementRender(Graphics graphics) {
@@ -246,7 +277,9 @@ public class Player extends Entity{
 	}
 	
 	public void render(Graphics graphics) {
-		if (isMoving) {
+		if (isJumping) {
+			jumpRender(graphics);
+		} else if (isMoving) {
 			movementRender(graphics);
 		} else {
 			staticRender(graphics);

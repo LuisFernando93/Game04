@@ -51,6 +51,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	private static String gameState = "START";
 	
 	private static int level = 1;
+	private static int score = 0;
 	private Start start;
 	private GameOver gameOver;
 	private UI ui;
@@ -76,12 +77,20 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		gameOver = new GameOver();
 	}
 	
+	public static int getScore() {
+		return Game.score;
+	}
+	
 	public static void setWorld(World world) {
 		Game.world = world;
 	}
 	
 	public static void setGameState(String gameState) {
 		Game.gameState = gameState;
+	}
+	
+	public static void increaseScore() {
+		Game.score+= 100;
 	}
 	
 	public static void main(String[] args) {
@@ -123,6 +132,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.player = new Player(0, 0, 32, 32, Game.spritesheet.getSprite(64, 0, 32, 32));
 		Game.entities.add(Game.player);
 		level = 1;
+		score = 0;
 		World.newWorld("level" + level + ".png");
 		Game.gameState = "NORMAL";
 		return;
@@ -236,6 +246,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			} else if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
 				player.setLeft(true);
 			}
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				player.setJump(true);
+			}
 			break;
 			
 		}
@@ -256,9 +269,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				player.setRight(false);
 			} else if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
 				player.setLeft(false);
-			}
-			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				player.setJump(true);
 			}
 			break;
 		

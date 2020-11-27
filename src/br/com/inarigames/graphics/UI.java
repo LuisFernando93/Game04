@@ -1,6 +1,7 @@
 package br.com.inarigames.graphics;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import br.com.inarigames.main.Game;
@@ -25,5 +26,8 @@ public class UI {
 		for (int i = 0; i < 3; i++) {
 			graphics.drawOval(20 + 40*i, 20, 30, 30);
 		}
+		graphics.setColor(Color.WHITE);
+		graphics.setFont(new Font("arial", Font.BOLD, 20));
+		graphics.drawString("Score: " + Game.getScore(), (Game.WIDTH*Game.SCALE) - 120, 30);
 	}
 }
