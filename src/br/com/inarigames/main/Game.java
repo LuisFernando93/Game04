@@ -21,6 +21,7 @@ import br.com.inarigames.graphics.GameOver;
 import br.com.inarigames.graphics.Spritesheet;
 import br.com.inarigames.graphics.Start;
 import br.com.inarigames.graphics.UI;
+import br.com.inarigames.graphics.Victory;
 import br.com.inarigames.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener{
@@ -55,6 +56,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	private Start start;
 	private GameOver gameOver;
 	private UI ui;
+	private Victory victory;
 	
 	public Game() {
 		
@@ -75,6 +77,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		ui = new UI();
 		start = new Start();
 		gameOver = new GameOver();
+		victory = new Victory();
 	}
 	
 	public static int getScore() {
@@ -138,6 +141,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		return;
 	}
 	
+	public static void endLevel() {
+		Game.gameState = "VICTORY";
+	}
+	
 	private void update() {
 		switch (Game.gameState) {
 		
@@ -158,10 +165,15 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		case "GAME OVER":
 			gameOver.update();
 			break;
+		
+		case "VICTORY": 
+			victory.update();
+			break;
 			
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + Game.gameState);
 		}
+		
 	}
 	
 	private void render() {
@@ -195,7 +207,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		case "GAME OVER":
 			gameOver.render(graphics);
 			break;
-			
+		
+		case "VICTORY": 
+			victory.render(graphics);
+			break;
 		}
 			
 		bs.show();
@@ -249,6 +264,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				player.setJump(true);
 			}
+			if (e.getKeyCode() == KeyEvent.VK_E) {
+				player.setRun(true);
+			}
 			break;
 			
 		}
@@ -270,6 +288,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			} else if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
 				player.setLeft(false);
 			}
+			if (e.getKeyCode() == KeyEvent.VK_E) {
+				player.setRun(false);
+			}
 			break;
 		
 		case "GAME OVER":
@@ -278,6 +299,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			}
 			break;
 			
+		case "VICTORY": 
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				victory.setRestart();
+			}
 		}
 		
 	}

@@ -12,12 +12,10 @@ public class Player extends Entity{
 	private boolean right = false, left = false;
 	
 	private boolean jump = false;
-	private boolean isJumping = false;
+	private boolean run = false;
 	private boolean isMoving = false;
 	private boolean isDamaged = false;
-	private int jumpSpeed = 5;
-	private int jumpFrames = 0;
-	private int jumpHeight = 100;
+	private int jumpHeight = 11;
 	
 	private BufferedImage[] playerMoveRightSprites;
 	private BufferedImage[] playerMoveLeftSprites;
@@ -26,7 +24,9 @@ public class Player extends Entity{
 	
 	private static final int MAX_LIFE = 3;
 	private int life = MAX_LIFE;
-	private int speed = 2;
+	private int walkSpeed = 3;
+	private int runSpeed = 6;
+	private int speed = walkSpeed;
 	private int power = 1;
 	private int dir;
 	private int right_dir = 1, left_dir = 2;
@@ -68,11 +68,21 @@ public class Player extends Entity{
 		this.jump = jump;
 	}
 	
+	public void setRun(boolean run) {
+		this.run = run;
+	}
+	
 	public void takeDamege(int power) {
 		this.life-=power;
 		if(this.life < 0) {
 			this.life = 0;
 		}
+	}
+	
+	public void checkRun() {
+		if (run) {
+			this.speed = runSpeed;
+		} else this.speed = walkSpeed;
 	}
 	
 	private void playerMovementAnimation() {
@@ -104,48 +114,17 @@ public class Player extends Entity{
 	
 	private void jump() {
 		
-		if (jump) {
-			if (!World.isFree(this.getX(), this.getY() + 1)) {
-				isJumping = true;
-			}
+		if(!World.isFree(this.getX(), this.getY() + 1) && jump) {
+			this.vspd = -(jumpHeight);
+			jump = false;
 		}
-		
-		if (isJumping) {
-			if (World.isFree(this.getX(), this.getY()-jumpSpeed)) {
-				y-=jumpSpeed;
-				jumpFrames+=jumpSpeed;
-				if (jumpFrames >= jumpHeight) {
-					isJumping = false;
-					jump = false;
-					jumpFrames = 0;
-				}
-			} else {
-				isJumping = false;
-				jump = false;
-				jumpFrames = 0;
-			}
-		} 
 		
 	}
 	
 	private void halfJump() {
 		
-		isJumping = true;
-		if (isJumping) {
-			if (World.isFree(this.getX(), this.getY()-jumpSpeed)) {
-				y-=jumpSpeed;
-				jumpFrames+=jumpSpeed;
-				if (jumpFrames >= (jumpHeight)/2) {
-					isJumping = false;
-					jump = false;
-					jumpFrames = 0;
-				}
-			} else {
-				isJumping = false;
-				jump = false;
-				jumpFrames = 0;
-			}
-		} 
+		this.vspd = (-3*jumpHeight)/4;
+		System.out.println(vspd);
 	}
 	
 	private Enemy collidingEnemy() {
@@ -177,17 +156,37 @@ public class Player extends Entity{
 	
 	protected void freeFall() {
 		
-		if(World.isFree(this.getX(), this.getY() + GRAVITY)) {
+		vspd+=GRAVITY;
+		jump();
+		
+		if(!World.isFree(this.getX(), (int)(this.y + vspd))) {
+			int signVsp = 0;
+			if (vspd >= 0) {
+				signVsp = 1;
+			} else {
+				signVsp = -1;
+			}
+			
+			while (World.isFree(this.getX(), (int)(this.y + signVsp) )) {
+				y+=signVsp; 
+			}
+			vspd = 0;
+		}
+		y += vspd;
+		
+	}
+	
+	private void checkIfStomp() {
+		if(World.isFree(this.getX(), this.getY() + 1)) {
 			freeFalling = true;
 		} else freeFalling = false;
 		
-		if (freeFalling  && !isJumping) {
-			this.y+=GRAVITY;
+		if(freeFalling) {
 			Enemy enemy = collidingEnemy();
 			if (enemy != null) {
 				stompEnemy(enemy);
 			}
- 		}
+		}
 	}
 	
 	private void updateCamera() {
@@ -240,16 +239,28 @@ public class Player extends Entity{
 		}
 	}
 	
+	private void checkGoal() {
+		for (Entity entity : Game.entities) {
+			if (entity instanceof Goal) {
+				if(isColliding(this, entity)) {
+					Game.endLevel();
+				}
+			}
+		}
+	}
+	
 	public void update() {
+		checkIfStomp();
 		freeFall();
+		checkRun();
 		move();
-		jump();
 		updateCamera();
 		fallOutOfGame();
 		takeItem();
 		takeDamage();
 		checkIfIsDamaged();
 		checkLife();
+		checkGoal();
 	}
 	
 	private void jumpRender(Graphics graphics) {
@@ -277,7 +288,7 @@ public class Player extends Entity{
 	}
 	
 	public void render(Graphics graphics) {
-		if (isJumping) {
+		if (vspd<0) {
 			jumpRender(graphics);
 		} else if (isMoving) {
 			movementRender(graphics);

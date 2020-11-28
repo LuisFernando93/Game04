@@ -16,7 +16,8 @@ public class Entity {
 	protected int width, height;
 	protected int maskx = 0, masky = 0, maskw = 32, maskh = 32;
 	protected int depth;
-	protected static final int GRAVITY = 4;
+	protected double vspd = 0;
+	protected static final double GRAVITY = 0.6;
 	protected boolean freeFalling = false;
 	
 	protected static BufferedImage PLAYER_RIGHT_EN = Game.spritesheet.getSprite(2*32, 0, 32, 32);
@@ -88,13 +89,22 @@ public class Entity {
 	
 	protected void freeFall() {
 		
-		if(World.isFree(this.getX(), this.getY() + GRAVITY)) {
-			freeFalling = true;
-		} else freeFalling = false;
-		
-		if (freeFalling) {
-			this.y+=GRAVITY;
+		vspd+=GRAVITY;
+		if(!World.isFree(this.getX(), (int)(this.y + vspd))) {
+			
+			int signVsp = 0;
+			if (vspd >= 0) {
+				signVsp = 1;
+			} else {
+				signVsp = -1;
+			}
+			
+			while (World.isFree(this.getX(), (int)(this.y + signVsp) )) {
+				y+=signVsp; 
+			}
+			vspd = 0;
 		}
+		y += vspd;
 	}
 	
 	public void update() {
