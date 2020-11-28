@@ -42,9 +42,11 @@ public class Start {
 		graphics.setColor(Color.white);
 		graphics.setFont(new Font("arial", Font.BOLD, 30));
 		graphics.drawString("Game 04", (Game.WIDTH*Game.SCALE)/2 - 60, (Game.HEIGHT*Game.SCALE)/2 - 60);
+		graphics.drawString("Tecla E para correr, espaço para pular", (Game.WIDTH*Game.SCALE)/2 - 250, (Game.HEIGHT*Game.SCALE)/2 - 10);
+		graphics.drawString("Teclas A e D e setas para andar", (Game.WIDTH*Game.SCALE)/2 - 210, (Game.HEIGHT*Game.SCALE)/2 + 40);
 		graphics.setFont(new Font("arial", Font.BOLD, 25));
 		if (showMessageStart) {
-			graphics.drawString(">Pressione Enter para começar<", (Game.WIDTH*Game.SCALE)/2 - 180, (Game.HEIGHT*Game.SCALE)/2 - 10);
+			graphics.drawString(">Pressione Enter para começar<", (Game.WIDTH*Game.SCALE)/2 - 180, (Game.HEIGHT*Game.SCALE)/2 + 90);
 		}
 	}
 }
